@@ -47,6 +47,18 @@ egc 完全に理解した -c yellow
 - green
 - blue
 
+## フォントを指定して絵文字を作成
+
+```
+egc 完全に理解した -f mplus
+```
+
+指定できるフォント
+
+- mono — Noto Sans Mono CJK JP Bold (default)
+- noto — Noto Sans JP Bold
+- mplus — M+ 1 Black
+
 ## 改行を含む絵文字を作成
 
 `\n` を入力に含めるか、シェルの改行入りクォート (`$'...\n...'`) を渡すと複数行になります。

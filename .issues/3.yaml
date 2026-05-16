@@ -1,0 +1,12 @@
+id: 3
+title: フォントを指定できるようにする
+status: Done
+description: |-
+    下記のフォントを指定できるようにする。
+    default: Noto Sans Mono CJK JP BOLD
+    M + 1p black
+    Noto Sans JP
+references: []
+scope: []
+created_at: 2026-05-16T23:39:02.477149+09:00
+updated_at: 2026-05-16T23:41:03.15371+09:00
