@@ -1,0 +1,11 @@
+id: 2
+title: テキストを改行できるようにする
+status: Done
+description: |-
+    絵文
+    字。
+    と入力して改行された画像が生成されるようにする。
+references: []
+scope: []
+created_at: 2026-05-16T23:34:46.619476+09:00
+updated_at: 2026-05-16T23:50:00+09:00
