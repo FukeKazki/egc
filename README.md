@@ -4,13 +4,16 @@ Slack などで使用する絵文字を生成する CLI ツール
 
 # Install
 
-Mac でのみ使用可能です。
-
-## Homebrew
+## mise
 
 ```
-brew tap apple-yagi/tap
-brew install egc
+mise use -g go:github.com/FukeKazki/egc@latest
+```
+
+## go install
+
+```
+go install github.com/FukeKazki/egc@latest
 ```
 
 # Usage
