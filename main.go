@@ -16,8 +16,14 @@ import (
 	"golang.org/x/image/math/fixed"
 )
 
+//go:embed fonts/NotoSansMonoCJKjp-Bold.otf
+var fontMono []byte
+
 //go:embed fonts/NotoSansJP-Bold.ttf
-var fontData []byte
+var fontNoto []byte
+
+//go:embed fonts/MPLUS1-Black.ttf
+var fontMplus []byte
 
 const (
 	imgW = 500
@@ -27,11 +33,15 @@ const (
 func main() {
 	colorName := flag.String("color", "pink", "文字の色: pink, yellow, black, red, green, blue")
 	flag.StringVar(colorName, "c", "pink", "文字の色 (短縮形)")
+	fontName := flag.String("font", "mono", "フォント: mono, noto, mplus")
+	flag.StringVar(fontName, "f", "mono", "フォント (短縮形)")
 	flag.Usage = func() {
-		fmt.Fprintf(os.Stderr, "Usage: %s [-c COLOR] TEXT\n", os.Args[0])
+		fmt.Fprintf(os.Stderr, "Usage: %s [-c COLOR] [-f FONT] TEXT\n", os.Args[0])
 		flag.PrintDefaults()
 	}
-	flag.Parse()
+	// Go's flag.Parse stops at the first non-flag arg, so `egc TEXT -c yellow`
+	// would silently ignore the flag. Reorder so flags always come first.
+	flag.CommandLine.Parse(reorderArgs(os.Args[1:]))
 
 	if flag.NArg() < 1 {
 		flag.Usage()
@@ -46,7 +56,13 @@ func main() {
 		os.Exit(1)
 	}
 
-	ttf, err := opentype.Parse(fontData)
+	fontBytes, err := pickFont(*fontName)
+	if err != nil {
+		fmt.Fprintln(os.Stderr, err)
+		os.Exit(1)
+	}
+
+	ttf, err := opentype.Parse(fontBytes)
 	if err != nil {
 		fmt.Fprintln(os.Stderr, "failed to parse font:", err)
 		os.Exit(1)
@@ -133,6 +149,40 @@ func lineBounds(face font.Face, lines []string) (maxW, maxH int) {
 		}
 	}
 	return
+}
+
+func reorderArgs(args []string) []string {
+	var flags, positional []string
+	for i := 0; i < len(args); i++ {
+		a := args[i]
+		if a == "--" {
+			positional = append(positional, args[i+1:]...)
+			break
+		}
+		if len(a) > 1 && a[0] == '-' {
+			flags = append(flags, a)
+			if !strings.Contains(a, "=") && i+1 < len(args) {
+				flags = append(flags, args[i+1])
+				i++
+			}
+			continue
+		}
+		positional = append(positional, a)
+	}
+	return append(flags, positional...)
+}
+
+func pickFont(name string) ([]byte, error) {
+	switch name {
+	case "mono":
+		return fontMono, nil
+	case "noto":
+		return fontNoto, nil
+	case "mplus":
+		return fontMplus, nil
+	default:
+		return nil, fmt.Errorf("指定できるフォント : mono, noto, mplus")
+	}
 }
 
 func pickColor(name string) (color.Color, error) {
