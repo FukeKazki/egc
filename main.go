@@ -49,6 +49,15 @@ func main() {
 	}
 	raw := strings.ReplaceAll(flag.Arg(0), `\n`, "\n")
 	lines := strings.Split(raw, "\n")
+	// 明示的な改行が無く 3 文字以上なら、Slack の絵文字メーカー風に
+	// 中央で 2 行に分割して 1 文字あたりを大きく見せる。
+	if len(lines) == 1 {
+		runes := []rune(lines[0])
+		if len(runes) >= 3 {
+			half := len(runes) / 2
+			lines = []string{string(runes[:half]), string(runes[half:])}
+		}
+	}
 
 	col, err := pickColor(*colorName)
 	if err != nil {
