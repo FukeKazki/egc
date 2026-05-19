@@ -55,9 +55,9 @@ egc 完全に理解した -f mplus
 
 指定できるフォント
 
-- mono — Noto Sans Mono CJK JP Bold (default)
+- mono — Noto Sans Mono CJK JP Bold
 - noto — Noto Sans JP Bold
-- mplus — M+ 1 Black
+- mplus — M+ 1 Black (default)
 
 ## 改行を含む絵文字を作成
 

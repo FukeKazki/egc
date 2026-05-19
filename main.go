@@ -33,11 +33,20 @@ const (
 func main() {
 	colorName := flag.String("color", "pink", "文字の色: pink, yellow, black, red, green, blue")
 	flag.StringVar(colorName, "c", "pink", "文字の色 (短縮形)")
-	fontName := flag.String("font", "mono", "フォント: mono, noto, mplus")
-	flag.StringVar(fontName, "f", "mono", "フォント (短縮形)")
+	fontName := flag.String("font", "mplus", "フォント: mono, noto, mplus")
+	flag.StringVar(fontName, "f", "mplus", "フォント (短縮形)")
 	flag.Usage = func() {
 		fmt.Fprintf(os.Stderr, "Usage: %s [-c COLOR] [-f FONT] TEXT\n", os.Args[0])
 		flag.PrintDefaults()
+		fmt.Fprintln(os.Stderr, `
+改行の仕様:
+  - 入力中の \n (バックスラッシュ+n) を改行として扱い、複数行で描画します。
+    シェルが \ を取り除かないようシングルクォートで囲んでください:
+      egc 'しゃべる\nな'
+    ダブルクォートなら \\n、zsh/bash の $'...\n...' でも可。
+  - 改行を含まず 3 文字以上の入力は、中央で自動的に 2 行に分割されます
+    (例: 完全に理解した → 完全に / 理解した)。
+    分割位置を変えたい場合は \n を明示してください。`)
 	}
 	// Go's flag.Parse stops at the first non-flag arg, so `egc TEXT -c yellow`
 	// would silently ignore the flag. Reorder so flags always come first.
